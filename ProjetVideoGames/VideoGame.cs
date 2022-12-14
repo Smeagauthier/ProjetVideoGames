@@ -8,6 +8,8 @@ namespace ProjetVideoGames
 {
     internal class VideoGame
     {
-        public int creditCost; 
+        public int creditCost;
+        public string console; 
+      
     }
 }
