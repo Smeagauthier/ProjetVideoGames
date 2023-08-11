@@ -1,0 +1,40 @@
+﻿<Window x:Class="Projet.Registration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projet"
+        mc:Ignorable="d"
+        Title="Registration" Height="450" Width="800">
+    <Grid Margin="0,0,3,3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Inscription" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 10"/>
+
+        <Label Grid.Row="1" Content="Nom d'utilisateur :" VerticalAlignment="Center" Margin="10"/>
+        <TextBox Grid.Row="1" x:Name="txtUsername" Margin="10" Text="Nom d'utilisateur"/>
+
+        <Label Grid.Row="2" Content="Mot de passe :" VerticalAlignment="Center" Margin="10"/>
+        <PasswordBox Grid.Row="2" x:Name="txtPassword" Margin="10" Password="Password"/>
+
+        <Label Grid.Row="3" Content="Date de naissance :" VerticalAlignment="Center" Margin="10"/>
+        <DatePicker Grid.Row="3" x:Name="dpDateOfBirth" Margin="10"/>
+
+        <Label Grid.Row="4" Content="Pseudo:" VerticalAlignment="Center" Margin="10"/>
+        <TextBox Grid.Row="4" x:Name="txtPseudo" Margin="10" Text="Pseudo"/>
+
+        <Button Grid.Row="5" Content="S'inscrire" HorizontalAlignment="Center" Margin="10" Click="RegisterButton_Click" FontWeight="Bold" Background="LightGreen"/>
+
+        <Button Content="Retour" HorizontalAlignment="Left" Margin="733,4,0,10" Click="BackButton_Click" Width="42" FontWeight="Bold" Background="LightBlue"/>
+
+        <TextBlock Grid.Row="6" x:Name="txtMessage" Text="" Foreground="Red" HorizontalAlignment="Center" Margin="0 10"/>
+    </Grid>
+</Window>
