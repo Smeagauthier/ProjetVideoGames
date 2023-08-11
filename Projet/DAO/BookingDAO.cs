@@ -184,7 +184,7 @@ namespace Projet.DAO
             }
             return bookings;
         }
-        //Créer un loan je dois récupérer la liste des réservations
+        //Créer un loan pour récupérer la liste des réservations
         public List<Booking> GetAllBookingsForVideoGame(VideoGame videoGame)
         {
             List<Booking> bookings = new List<Booking>();
@@ -212,6 +212,71 @@ namespace Projet.DAO
                 }
             }
             return bookings;
+        }
+
+        public List<Player> GetBookerPlayersForCopy(int idCopy)
+        {
+            List<Player> bookerPlayers = new List<Player>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand("SELECT DISTINCT p.* FROM Player p INNER JOIN Booking b ON p.idPlayer = b.idPlayer WHERE b.idVideoGame = (SELECT idVideoGame FROM Copy WHERE idCopy = @idCopy)", connection))
+                    {
+                        command.Parameters.AddWithValue("@idCopy", idCopy);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Player player = new Player
+                                {
+                                    IdPlayer = reader.GetInt32(reader.GetOrdinal("idPlayer")),
+                                    Pseudo = reader.GetString(reader.GetOrdinal("pseudo")),
+                                    Credit = reader.GetInt32(reader.GetOrdinal("credit")),
+                                    RegistrationDate = reader.GetDateTime(reader.GetOrdinal("registrationDate")),
+                                    DateOfBirth = reader.GetDateTime(reader.GetOrdinal("dateOfBirth")),
+                                };
+                                bookerPlayers.Add(player);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw new Exception("Une erreur SQL s'est produite lors de la recherche des joueurs ayant réservé la même copie !");
+            }
+
+            return bookerPlayers;
+        }
+
+        //Méthode pour empêcher un currentPlayer de réserver 2x le même jeu
+        public bool GetBookingsByPlayer(int idPlayer, int idVideoGame)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Booking WHERE idPlayer = @idPlayer AND idVideoGame = @idVideoGame", connection))
+                    {
+                        command.Parameters.AddWithValue("@idPlayer", idPlayer);
+                        command.Parameters.AddWithValue("@idVideoGame", idVideoGame);
+
+                        int count = (int)command.ExecuteScalar();
+                        return count > 0;
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw new Exception("Une erreur SQL s'est produite lors de la vérification de l'existence d'une réservation !");
+            }
         }
 
 

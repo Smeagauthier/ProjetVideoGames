@@ -3,6 +3,7 @@ using Projet.metier;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Windows;
 
 namespace Projet
@@ -33,6 +34,31 @@ namespace Projet
 
         private void LoadBookingsForPlayer()
         {
+            /*BookingDAO bookingDAO = new BookingDAO();
+            List<Booking> bookings = bookingDAO.FindByPlayer(currentPlayer.IdPlayer);
+            List<Booking> filteredBookings = new List<Booking>();
+
+            foreach (Booking booking in bookings)
+            {
+                LoanDAO loanDAO = new LoanDAO();
+                List<Loan> loansForBooking = loanDAO.FindLoansByBooking(booking.IdBooking);
+
+                bool isOnGoing = false;
+                foreach (Loan loan in loansForBooking)
+                {
+                    if (loan.Ongoing)
+                    {
+                        isOnGoing = true;
+                        break;
+                    }
+                }
+
+                if (!isOnGoing)
+                {
+                    filteredBookings.Add(booking);
+                }
+            }*/
+
             BookingDAO bookingDAO = new BookingDAO();
             List<Booking> bookings = bookingDAO.FindByPlayer(currentPlayer.IdPlayer);
             lstBookings.ItemsSource = bookings;

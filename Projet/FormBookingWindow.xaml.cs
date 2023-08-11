@@ -65,6 +65,16 @@ namespace Projet
             {
                 int numberOfWeeks = Convert.ToInt32(selectedItem.Content);
 
+                /*Empêcher un currentPlayer de réserver 2x le même jeu
+                Booking booking = new Booking();
+                bool bookingsForCurrentPlayer = booking.GetBookingsByPlayer(currentPlayer.IdPlayer, selectedVideoGame.IdVideoGame); 
+
+                if (bookingsForCurrentPlayer)
+                {
+                    MessageBox.Show("Vous avez déjà réservé ce jeu vidéo. Vous ne pouvez pas réserver le même jeu plusieurs fois.");
+                    return;
+                }*/
+
                 // Crée une nouvelle réservation (booking) avec les informations appropriées
                 Booking newBooking = new Booking();
                 newBooking.BookingDate = DateTime.Now;

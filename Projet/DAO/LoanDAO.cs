@@ -309,5 +309,42 @@ namespace Projet.DAO
             return currentLoan;
         }
 
+        public List<Loan> FindLoansByBooking(int idBooking)
+        {
+            List<Loan> loans = new List<Loan>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(this.connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(
+                                    "SELECT l.idLoan, l.ongoing " +
+                                    "FROM dbo.Loan l " +
+                                    "JOIN dbo.Copy c ON l.idCopy = c.idCopy " +
+                                    "JOIN dbo.Booking b ON c.idVideoGame = b.idVideoGame " +
+                                    "WHERE b.idBooking = @idBooking", connection); cmd.Parameters.AddWithValue("@idBooking", idBooking);
+                    connection.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Loan loan = new Loan
+                            {
+                                IdLoan = reader.GetInt32(reader.GetOrdinal("idLoan")),
+                                Ongoing = reader.GetBoolean(reader.GetOrdinal("ongoing"))
+                            };
+
+                            loans.Add(loan);
+                        }
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw new Exception("Une erreur SQL s'est produite lors de la recherche des prêts pour la réservation !");
+            }
+            return loans;
+        }
+
     }
 }

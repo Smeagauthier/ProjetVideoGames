@@ -14,7 +14,9 @@ namespace Projet.metier
         private DateTime bookingDate;
         private Player player;
         private VideoGame videoGame;
-        private int numberOfWeeks; 
+        private int numberOfWeeks;
+        public Copy Copy { get; set; }
+
 
         public Booking(int idBooking, DateTime bookingDate, Player player, VideoGame videoGame)
         {
@@ -81,6 +83,20 @@ namespace Projet.metier
             return booking;
         }
 
-        
+        public List<Player> GetBookerPlayersForCopy(int idCopy)
+        {
+            BookingDAO bookingDAO = new BookingDAO();
+            return bookingDAO.GetBookerPlayersForCopy(idCopy);     
+        }
+
+        //Méthode pour empêcher un currentPlayer de réserver 2x le même jeu
+        public bool GetBookingsByPlayer(int idPlayer, int idVideoGame)
+        {
+            BookingDAO bookingDAO = new BookingDAO();
+            return bookingDAO.GetBookingsByPlayer(idPlayer, idVideoGame);
+        }
+
+
+
     }
 }
