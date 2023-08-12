@@ -81,7 +81,7 @@
             <Button Content="Ajouter" Click="AddButton_Click" Grid.Column="1" Grid.Row="3" Margin="5" HorizontalAlignment="Right" Background="LightGreen" FontWeight="Bold"/>
 
             <!-- Refresh Button -->
-            <Button Content="Rafraîchir" Click="RefreshButton_Click" Grid.Column="1" Grid.Row="3" Margin="563,5,0,5" HorizontalAlignment="Left" Background="LightBlue" FontWeight="Bold"/>
+            <Button Content="Rafraîchir" Click="RefreshButton_Click" Grid.Column="1" Grid.Row="3" Margin="540,6,0,4" HorizontalAlignment="Left" Background="LightBlue" FontWeight="Bold"/>
             <!-- Bouton dans la nouvelle colonne -->
         </Grid>
         <!-- Bouton dans la nouvelle ligne -->
