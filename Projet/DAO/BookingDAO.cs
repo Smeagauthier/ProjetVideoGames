@@ -131,59 +131,6 @@ namespace Projet.DAO
             return false;
         }
 
-        public List<Booking> FindByPlayer(int idPlayer)
-        {
-            List<Booking> bookings = new List<Booking>();
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(this.connectionString))
-                {
-                    SqlCommand cmd = new SqlCommand(
-                        "SELECT b.idBooking, b.bookingDate, b.numberOfWeeks, v.name AS VideoGameName, v.creditCost " +
-                        "FROM dbo.Booking b " +
-                        "JOIN dbo.VideoGame v ON b.idVideoGame = v.idVideoGame " +
-                        "WHERE b.idPlayer=@idPlayer",
-                        connection);
-
-                    cmd.Parameters.AddWithValue("@idPlayer", idPlayer);
-                    connection.Open();
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int bookingId = reader.GetInt32(reader.GetOrdinal("idBooking"));
-                            DateTime bookingDate = reader.GetDateTime(reader.GetOrdinal("bookingDate"));
-
-                            int numberOfWeeksOrdinal = reader.GetOrdinal("numberOfWeeks");
-                            int numberOfWeeks = reader.IsDBNull(numberOfWeeksOrdinal) ? 0 : reader.GetInt32(numberOfWeeksOrdinal);
-
-                            string videoGameName = reader.GetString(reader.GetOrdinal("VideoGameName"));
-                            int creditCost = reader.GetInt32(reader.GetOrdinal("creditCost"));
-
-                            Booking booking = new Booking
-                            {
-                                IdBooking = bookingId,
-                                BookingDate = bookingDate,
-                                NumberOfWeeks = numberOfWeeks,
-                                VideoGame = new VideoGame
-                                {
-                                    Name = videoGameName,
-                                    CreditCost = creditCost
-                                }
-                            };
-
-                            bookings.Add(booking);
-                        }
-                    }
-                }
-            }
-            catch (SqlException)
-            {
-                throw new Exception("Une erreur SQL s'est produite lors de la recherche des réservations !");
-            }
-            return bookings;
-        }
         //Créer un loan pour récupérer la liste des réservations
         public List<Booking> GetAllBookingsForVideoGame(VideoGame videoGame)
         {
@@ -204,7 +151,9 @@ namespace Projet.DAO
                             {
                                 IdBooking = reader.GetInt32(reader.GetOrdinal("IdBooking")),
                                 BookingDate = reader.GetDateTime(reader.GetOrdinal("BookingDate")),
-                                NumberOfWeeks = reader.GetInt32(reader.GetOrdinal("NumberOfWeeks"))
+                                NumberOfWeeks = reader.GetInt32(reader.GetOrdinal("NumberOfWeeks")),
+                                Player = new Player { IdPlayer = reader.GetInt32(reader.GetOrdinal("IdPlayer")) },
+                                VideoGame = new VideoGame { IdVideoGame = reader.GetInt32(reader.GetOrdinal("IdVideoGame")) }
                             };
                             bookings.Add(booking);
                         }
@@ -277,6 +226,61 @@ namespace Projet.DAO
             {
                 throw new Exception("Une erreur SQL s'est produite lors de la vérification de l'existence d'une réservation !");
             }
+        }
+
+        //Récupérer les réservations selon un joueur
+        public List<Booking> FindBookingsByPlayer(int idPlayer)
+        {
+            List<Booking> bookings = new List<Booking>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(this.connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        "SELECT b.idBooking, b.bookingDate, b.numberOfWeeks, v.name AS VideoGameName, v.creditCost " +
+                        "FROM dbo.Booking b " +
+                        "JOIN dbo.VideoGame v ON b.idVideoGame = v.idVideoGame " +
+                        "WHERE b.idPlayer=@idPlayer",
+                        connection);
+
+                    cmd.Parameters.AddWithValue("@idPlayer", idPlayer);
+                    connection.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int bookingId = reader.GetInt32(reader.GetOrdinal("idBooking"));
+                            DateTime bookingDate = reader.GetDateTime(reader.GetOrdinal("bookingDate"));
+
+                            int numberOfWeeksOrdinal = reader.GetOrdinal("numberOfWeeks");
+                            int numberOfWeeks = reader.IsDBNull(numberOfWeeksOrdinal) ? 0 : reader.GetInt32(numberOfWeeksOrdinal);
+
+                            string videoGameName = reader.GetString(reader.GetOrdinal("VideoGameName"));
+                            int creditCost = reader.GetInt32(reader.GetOrdinal("creditCost"));
+
+                            Booking booking = new Booking
+                            {
+                                IdBooking = bookingId,
+                                BookingDate = bookingDate,
+                                NumberOfWeeks = numberOfWeeks,
+                                VideoGame = new VideoGame
+                                {
+                                    Name = videoGameName,
+                                    CreditCost = creditCost
+                                }
+                            };
+
+                            bookings.Add(booking);
+                        }
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw new Exception("Une erreur SQL s'est produite lors de la recherche des réservations !");
+            }
+            return bookings;
         }
 
 

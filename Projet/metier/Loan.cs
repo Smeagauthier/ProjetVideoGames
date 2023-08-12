@@ -144,11 +144,56 @@ namespace Projet.metier
                 this.Ongoing = false;
 
                 // Mise à jour de la loan dans la base de données
-                LoanDAO loanDAO = new LoanDAO(); 
+                LoanDAO loanDAO = new LoanDAO();
                 bool updated = loanDAO.Update(this);
                 if (!updated)
                 {
                     throw new Exception("Erreur lors de la mise à jour du prêt.");
+                }
+
+                // Rechercher les réservations pour ce jeu
+                BookingDAO bookingDAO = new BookingDAO();
+                List<Booking> bookings = bookingDAO.GetAllBookingsForVideoGame(this.Copy.VideoGame);
+                CopyDAO copyDAO = new CopyDAO();
+
+                if (bookings.Count == 0)
+                {
+                    //MessageBox.Show("Aucune réservation en attente, le jeu est disponible.");
+                }
+                else if (bookings.Count == 1)
+                {
+                    //Transférer la réservation vers un autre joueur si celui qui possède le jeu en location le rend    
+                    Player player = bookings[0].Player;
+                    this.Copy.VideoGame.SelectBooking(copyDAO, bookingDAO, player, loanDAO);
+                    
+                }
+                else
+                {
+                    // Transfert des réservations en fonction des règles de priorité
+                    bookings.Sort((b1, b2) =>
+                    {
+                        // 1) Le plus de crédits sur son compte
+                        int compareCredits = b1.Player.Credit.CompareTo(b2.Player.Credit);
+                        if (compareCredits != 0) return compareCredits;
+                        
+                        // 2) Réservation la plus ancienne
+                        int compareBookingDate = b1.BookingDate.CompareTo(b2.BookingDate);
+                        if (compareBookingDate != 0) return compareBookingDate;
+                        
+
+                        // 3) Abonné inscrit depuis le plus longtemps
+                        int compareRegistrationDate = b1.Player.RegistrationDate.CompareTo(b2.Player.RegistrationDate);
+                        if (compareRegistrationDate != 0) return compareRegistrationDate;
+
+                        // 4) Abonné le plus âgé
+                        int compareDateOfBirth = b1.Player.DateOfBirth.CompareTo(b2.Player.DateOfBirth);
+                        if (compareDateOfBirth != 0) return compareDateOfBirth;
+
+                        // 5) Aléatoire
+                        return new Random().Next(0, 2) == 0 ? -1 : 1;
+                    });
+                    Player player = bookings[0].Player;
+                    this.Copy.VideoGame.SelectBooking(copyDAO, bookingDAO, player, loanDAO);
                 }
             }
             else

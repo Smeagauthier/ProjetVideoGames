@@ -69,11 +69,6 @@ namespace Projet.metier
             BookingDAO bookingDAO = new BookingDAO();
             return bookingDAO.Delete(this);
         }
-        public List<Booking> FindBookingsForPlayer(int idPlayer)
-        {
-            BookingDAO bookingDAO = new BookingDAO();
-            return bookingDAO.FindByPlayer(idPlayer);
-        }
 
         public Booking Find(int idBooking)
         {
@@ -94,6 +89,13 @@ namespace Projet.metier
         {
             BookingDAO bookingDAO = new BookingDAO();
             return bookingDAO.GetBookingsByPlayer(idPlayer, idVideoGame);
+        }
+
+        //Récupérer les bookings d'un player
+        public List<Booking> FindBookingsForPlayer(int idPlayer)
+        {
+            BookingDAO bookingDAO = new BookingDAO();
+            return bookingDAO.FindBookingsByPlayer(idPlayer);
         }
 
 

@@ -94,8 +94,7 @@ namespace Projet
                         CopyDAO copyDAO = new CopyDAO(connectionString);
                         BookingDAO bookingDAO = new BookingDAO(connectionString);
                         LoanDAO loanDAO = new LoanDAO();
-                        selectedVideoGame.SelectBooking(copyDAO, bookingDAO,currentPlayer,loanDAO);
-                        
+                        selectedVideoGame.SelectBooking(copyDAO, bookingDAO, currentPlayer, loanDAO);
 
                         MessageBox.Show($"La réservation a bien été effectuée. \nElle vous a coûté {totalCost} crédits. \nVotre nouveau solde de crédits est de {currentPlayer.Credit} crédits");
                         int credits = currentPlayer.Credit;

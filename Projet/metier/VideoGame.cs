@@ -128,6 +128,12 @@ namespace Projet.metier
                 if (loanDAO.Create(newLoan))
                 {
                     MessageBox.Show("Le prêt a été créé avec succès !");
+                    bool test = bookingDAO.Delete(selectedBooking);
+                    VideoGame vg = Find(selectedBooking.VideoGame.IdVideoGame);
+                    int creditsBooking = vg.CreditCost;
+                    creditsBooking = creditsBooking * selectedBooking.NumberOfWeeks;
+                    lender.Credit += creditsBooking;
+                    lender.UpdateCredit(lender);
                 }
                 else
                 {
