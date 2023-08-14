@@ -8,7 +8,7 @@ namespace Projet.DAO
 {
     public class AdministratorDAO : DAO<Administrator>
     {
-        // !! LES COMMENTAIRES DANS LES METHODES DAO SONT UNIQUEMENT EXPLIQUEE DANS CETTE CLASSE DAO !!!! (Redondance...)
+        // !!! LES COMMENTAIRES DANS LES METHODES DAO SONT UNIQUEMENT EXPLIQUEE DANS CETTE CLASSE DAO !!!! (Redondance...)
         private new string connectionString;
         //Elle utilise une chaîne de connexion pour établir une connexion à une base de données,
         //et cette chaîne de connexion est récupérée à partir d'un fichier de configuration.
